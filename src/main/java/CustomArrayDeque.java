@@ -675,7 +675,7 @@ public class CustomArrayDeque<E> implements Deque<E> {
             System.arraycopy(deque, head, a, 0, headToEnd);
             System.arraycopy(deque, 0, a, headToEnd, tail);
         }
-        if (a.length > size)
+        if(a.length > size)
             a[size] = null;
         return a;
     }
