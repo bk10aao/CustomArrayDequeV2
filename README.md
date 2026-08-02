@@ -4,6 +4,8 @@ An implementation of a java ArrayDeque using a circular buffer.
 
 All methods implemented are identical to those found in the [Java Deque interface](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Deque.html).
 
+Version one using a non-circular buffer cabn be found [here](https://github.com/bk10aao/CustomArrayDeque)
+
 # Build and Test
 
 To build and test the project run command `./gradlew clean build`
