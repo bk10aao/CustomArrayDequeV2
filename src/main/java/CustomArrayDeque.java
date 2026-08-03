@@ -175,7 +175,8 @@ public class CustomArrayDeque<E> implements Deque<E> {
         Objects.requireNonNull(c);
         if(c.isEmpty())
             return true;
-        Set<?> set = (c instanceof Set<?>) ? (Set<?>) c : new HashSet<>(c);
+        Collection<?> checkCollection = (c instanceof Set<?> || c.size() < 4) ? c : new HashSet<>(c);
+        Set<?> set = (checkCollection instanceof Set<?>) ? (Set<?>) checkCollection : new HashSet<>(checkCollection);
         for(int i = 0; i < size(); i++) {
             int index = (head + i) & (deque.length - 1);
             if(deque[index] != null && set.remove(deque[index]))
@@ -518,8 +519,11 @@ public class CustomArrayDeque<E> implements Deque<E> {
      */
     public boolean removeAll(final Collection<?> c) {
         Objects.requireNonNull(c);
+        if(c.isEmpty())
+            return false;
         boolean modified = false;
-        Set<?> set = (c instanceof Set<?>) ? (Set<?>) c : new HashSet<>(c);
+        Collection<?> checkCollection = (c instanceof Set<?> || c.size() < 4) ? c : new HashSet<>(c);
+        Set<?> set = (checkCollection instanceof Set<?>) ? (Set<?>) checkCollection : new HashSet<>(checkCollection);
         for(int i = 0; i < size(); i++) {
             int index = (head + i) & (deque.length - 1);
             if(deque[index] != null && set.contains(deque[index])) {
@@ -606,7 +610,8 @@ public class CustomArrayDeque<E> implements Deque<E> {
     public boolean retainAll(final Collection<?> c) {
         Objects.requireNonNull(c);
         boolean modified = false;
-        Set<?> set = (c instanceof Set<?>) ? (Set<?>) c : new HashSet<>(c);
+        Collection<?> checkCollection = (c instanceof Set<?> || c.size() < 4) ? c : new HashSet<>(c);
+        Set<?> set = (checkCollection instanceof Set<?>) ? (Set<?>) checkCollection : new HashSet<>(checkCollection);
         int size = size();
         for(int i = 0; i < size; i++) {
             int index = (head + i) & (deque.length - 1);
@@ -726,9 +731,13 @@ public class CustomArrayDeque<E> implements Deque<E> {
             if ((newSize <<= 1) < 0)
                 throw new IllegalStateException("Deque too big");
         E[] newArray = (E[]) new Object[newSize];
-        int elementsToCopy = oldCapacity - head;
-        System.arraycopy(deque, head, newArray, 0, elementsToCopy);
-        System.arraycopy(deque, 0, newArray, elementsToCopy, tail);
+        if(head <= tail)
+            System.arraycopy(deque, head, newArray, 0, currentSize);
+        else {
+            int elementsToCopy = oldCapacity - head;
+            System.arraycopy(deque, head, newArray, 0, elementsToCopy);
+            System.arraycopy(deque, 0, newArray, elementsToCopy, tail);
+        }
         deque = newArray;
         head = 0;
         tail = currentSize;
@@ -744,20 +753,22 @@ public class CustomArrayDeque<E> implements Deque<E> {
 
     private void removeInnerElement(final int index) {
         int size = size();
-        int i = (head + index) & (deque.length - 1);
-        deque[i] = null;
+        int mask = deque.length - 1;
+        deque[(head + index) & mask] = null;
+
         if(index < size / 2) {
+            // Shifting elements right to fill the gap from the left side
             for(int x = index; x > 0; x--) {
-                int current = (head + x) & (deque.length - 1);
-                int previous = (head + x - 1) & (deque.length - 1);
+                int current = (head + x) & mask;
+                int previous = (head + x - 1) & mask;
                 deque[current] = deque[previous];
             }
             deque[head] = null;
             shiftHeadRight();
         } else {
             for(int x = index; x < size - 1; x++) {
-                int current = (head + x) & (deque.length - 1);
-                int next = (head + x + 1) & (deque.length - 1);
+                int current = (head + x) & mask;
+                int next = (head + x + 1) & mask;
                 deque[current] = deque[next];
             }
             shiftTailLeft();
