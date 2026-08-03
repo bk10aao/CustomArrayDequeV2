@@ -27,7 +27,7 @@ import static java.lang.reflect.Array.newInstance;
  * @see <a href="https://www.linkedin.com/in/benjamin-kane-81149482/">LinkedIn</a>
  * @see <a href="https://github.com/bk10aao">GitHub account bk10aao</a>
  * @see <a href="https://github.com/bk10aao/CustomArrayDequeV2">Repository</a>
- * @see <a href="https://github.com/bk10aao/CustomArrayDequeV2">Version 1 (non-circular)</a>
+ * @see <a href="https://github.com/bk10aao/CustomArrayDequeV1">Version 1 (non-circular)</a>
  */
 public class CustomArrayDeque<E> implements Deque<E> {
 
@@ -171,6 +171,7 @@ public class CustomArrayDeque<E> implements Deque<E> {
      * @return {@code true} if this deque contains all the elements in the specified collection
      * @throws NullPointerException if the specified collection is null
      */
+    @SuppressWarnings("DataFlowIssue")
     public boolean containsAll(final Collection<?> c) {
         Objects.requireNonNull(c);
         if(c.isEmpty())
@@ -363,8 +364,7 @@ public class CustomArrayDeque<E> implements Deque<E> {
      */
     public boolean offer(final E item) {
         Objects.requireNonNull(item);
-        add(item);
-        return true;
+        return add(item);
     }
 
     /**
@@ -391,8 +391,7 @@ public class CustomArrayDeque<E> implements Deque<E> {
         Objects.requireNonNull(item);
         if(requiresResize())
             expand(1);
-        add(item);
-        return true;
+        return add(item);
     }
 
     /**
@@ -757,7 +756,6 @@ public class CustomArrayDeque<E> implements Deque<E> {
         deque[(head + index) & mask] = null;
 
         if(index < size / 2) {
-            // Shifting elements right to fill the gap from the left side
             for(int x = index; x > 0; x--) {
                 int current = (head + x) & mask;
                 int previous = (head + x - 1) & mask;
