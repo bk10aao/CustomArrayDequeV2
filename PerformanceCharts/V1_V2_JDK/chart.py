@@ -3,40 +3,42 @@ import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 
 # Load datasets
-jdk_df = pd.read_csv('ArrayDeque_performance.csv', sep=';')
-v1_df = pd.read_csv('CustomArrayDeque_performance.csv', sep=';')
-v2_df = pd.read_csv('CustomArrayDequeV2_performance.csv', sep=';')
+v1_df = pd.read_csv('CustomArrayDequeV1_jmh_performance_pivoted.csv', sep=';')
+v2_df = pd.read_csv('CustomArrayDequeV2_jmh_performance_pivoted.csv', sep=';')
+jdk_df = pd.read_csv('ArrayDeque_jmh_performance_pivoted.csv', sep=';')
 
-# Get common columns excluding 'Size' across all three files
+# Get common columns excluding 'Size'
 common_cols = sorted([
-    col for col in jdk_df.columns
-    if col in v1_df.columns and col in v2_df.columns and col != 'Size'
+    col for col in v1_df.columns
+    if col in v2_df.columns and col in jdk_df.columns and col != 'Size'
 ])
 
-# Filter for methods with valid data across all datasets
+# Filter for methods with valid data
 valid_cols = [
     col for col in common_cols
-    if pd.notna(jdk_df[col].mean()) and pd.notna(v1_df[col].mean()) and pd.notna(v2_df[col].mean())
+    if (pd.notna(v1_df[col].mean()) and
+        pd.notna(v2_df[col].mean()) and
+        pd.notna(jdk_df[col].mean()))
 ]
 
-# Define specific colors for each implementation
-color_jdk = '#2ecc71'  # Green for JDK native
-color_v1 = '#ff4d4d'   # Red for V1
-color_v2 = '#4da6ff'   # Blue for V2
+# Define specific colors
+color_v1  = '#ff4d4d'  # Red
+color_v2  = '#4da6ff'  # Blue
+color_jdk = '#4dff88'  # Green
 
 # Generate a plot for each valid method
 for method in valid_cols:
     fig, ax = plt.subplots(figsize=(8, 5.5))
 
     # Plot data
-    ax.plot(jdk_df['Size'], jdk_df[method],
-            color=color_jdk, marker='o', markersize=5,
-            linestyle='-', linewidth=2)
     ax.plot(v1_df['Size'], v1_df[method],
             color=color_v1, marker='o', markersize=5,
             linestyle='-', linewidth=2)
     ax.plot(v2_df['Size'], v2_df[method],
             color=color_v2, marker='o', markersize=5,
+            linestyle='-', linewidth=2)
+    ax.plot(jdk_df['Size'], jdk_df[method],
+            color=color_jdk, marker='o', markersize=5,
             linestyle='-', linewidth=2)
 
     # X-axis range exactly from 10,000 to 100,000
@@ -55,16 +57,16 @@ for method in valid_cols:
     for spine in ax.spines.values():
         spine.set_color('white')
 
-    # Custom Legend for all three implementations
+    # Custom Legend
     legend_elements = [
-        Line2D([0], [0], marker='o', color='none', label='JDK',
-               markerfacecolor=color_jdk, markeredgecolor=color_jdk,
-               markersize=8, linestyle='None'),
         Line2D([0], [0], marker='o', color='none', label='V1',
                markerfacecolor=color_v1, markeredgecolor=color_v1,
                markersize=8, linestyle='None'),
         Line2D([0], [0], marker='o', color='none', label='V2',
                markerfacecolor=color_v2, markeredgecolor=color_v2,
+               markersize=8, linestyle='None'),
+        Line2D([0], [0], marker='o', color='none', label='JDK',
+               markerfacecolor=color_jdk, markeredgecolor=color_jdk,
                markersize=8, linestyle='None')
     ]
 
@@ -89,4 +91,4 @@ for method in valid_cols:
     plt.savefig(f'plot_{safe_filename}.png', transparent=True, bbox_inches='tight')
     plt.close()
 
-print(f"Successfully generated {len(valid_cols)} performance graphs comparing JDK ArrayDeque, V1, and V2.")
+print(f"Successfully generated {len(valid_cols)} V1 vs V2 vs JDK performance graphs with X-axis capped at 100,000.")

@@ -3,35 +3,35 @@ import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 
 # Load datasets
-custom_df = pd.read_csv('CustomArrayDeque_performance.csv', sep=';')
-native_df = pd.read_csv('CustomArrayDequeV2_performance.csv', sep=';')
+v1_df = pd.read_csv('CustomArrayDequeV1_jmh_performance_pivoted.csv', sep=';')
+v2_df = pd.read_csv('CustomArrayDequeV2_jmh_performance_pivoted.csv', sep=';')
 
 # Get common columns excluding 'Size'
 common_cols = sorted([
-    col for col in custom_df.columns
-    if col in native_df.columns and col != 'Size'
+    col for col in v1_df.columns
+    if col in v2_df.columns and col != 'Size'
 ])
 
 # Filter for methods with valid data
 valid_cols = [
     col for col in common_cols
-    if pd.notna(custom_df[col].mean()) and pd.notna(native_df[col].mean())
+    if pd.notna(v1_df[col].mean()) and pd.notna(v2_df[col].mean())
 ]
 
 # Define specific colors
-color_custom = '#ff4d4d'  # Red
-color_native = '#4da6ff'  # Blue
+color_v1 = '#ff4d4d'  # Red
+color_v2 = '#4da6ff'  # Blue
 
 # Generate a plot for each valid method
 for method in valid_cols:
     fig, ax = plt.subplots(figsize=(8, 5.5))
 
     # Plot data
-    ax.plot(custom_df['Size'], custom_df[method],
-            color=color_custom, marker='o', markersize=5,
+    ax.plot(v1_df['Size'], v1_df[method],
+            color=color_v1, marker='o', markersize=5,
             linestyle='-', linewidth=2)
-    ax.plot(native_df['Size'], native_df[method],
-            color=color_native, marker='o', markersize=5,
+    ax.plot(v2_df['Size'], v2_df[method],
+            color=color_v2, marker='o', markersize=5,
             linestyle='-', linewidth=2)
 
     # X-axis range exactly from 10,000 to 100,000
@@ -53,10 +53,10 @@ for method in valid_cols:
     # Custom Legend
     legend_elements = [
         Line2D([0], [0], marker='o', color='none', label='V1',
-               markerfacecolor=color_custom, markeredgecolor=color_custom,
+               markerfacecolor=color_v1, markeredgecolor=color_v1,
                markersize=8, linestyle='None'),
         Line2D([0], [0], marker='o', color='none', label='V2',
-               markerfacecolor=color_native, markeredgecolor=color_native,
+               markerfacecolor=color_v2, markeredgecolor=color_v2,
                markersize=8, linestyle='None')
     ]
 
@@ -81,4 +81,4 @@ for method in valid_cols:
     plt.savefig(f'plot_{safe_filename}.png', transparent=True, bbox_inches='tight')
     plt.close()
 
-print(f"Successfully generated {len(valid_cols)} performance graphs with X-axis capped at 100,000.")
+print(f"Successfully generated {len(valid_cols)} V1 vs V2 performance graphs with X-axis capped at 100,000.")

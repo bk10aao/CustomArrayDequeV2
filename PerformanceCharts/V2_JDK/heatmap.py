@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Load data files
-custom_df = pd.read_csv('CustomArrayDequeV2_performance.csv', sep=';')
-native_df = pd.read_csv('ArrayDeque_performance.csv', sep=';')
+custom_df = pd.read_csv('CustomArrayDequeV2_jmh_performance_pivoted.csv', sep=';')
+native_df = pd.read_csv('ArrayDeque_jmh_performance_pivoted.csv', sep=';')
 
 # Clean columns
 custom_df.columns = [c.replace('"', '').strip() for c in custom_df.columns]
@@ -74,7 +74,7 @@ sns.heatmap(
     yticklabels=sorted_methods,
     ax=ax,
     cbar_kws={
-        'label': '← JDK Faster (ArrayDeque) | Relative Speedup Scale (Clipped at 16x) | Custom Faster (CustomArrayDequeV2) →'
+        'label': '← JDK Faster | Relative Speedup Scale | V2 Faster →'
     },
     linewidths=0.6,
     linecolor='#444444',
@@ -83,7 +83,7 @@ sns.heatmap(
 
 ax.set_title(
     'Java ArrayDeque Performance Comparison Matrix Heatmap\n'
-    '(Positive/Blue = CustomArrayDequeV2 Faster, Negative/Red = ArrayDeque Faster)',
+    '(Positive/Blue = V2 Faster, Negative/Red = JDK Faster)',
     color='#ffffff', fontsize=16, fontweight='bold', pad=20
 )
 

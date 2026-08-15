@@ -2,9 +2,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 
-# Load datasets
-custom_df = pd.read_csv('CustomArrayDequeV2_performance.csv', sep=';')
-native_df = pd.read_csv('ArrayDeque_performance.csv', sep=';')
+# Load datasets with updated filenames
+custom_df = pd.read_csv('CustomArrayDequeV2_jmh_performance_pivoted.csv', sep=';')
+native_df = pd.read_csv('ArrayDeque_jmh_performance_pivoted.csv', sep=';')
 
 # Get common columns excluding 'Size'
 common_cols = sorted([

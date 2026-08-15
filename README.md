@@ -104,105 +104,101 @@ Notes:
 
 # Performance
 
-Below performance is a comparison made at 100,000 operations per method.
-
-Note: all data is an average of 100 runs. Margins within $\pm 5\%$ ($\le 1.05x$) are considered statistical ties.
+Comparison table uses the average JMH score (ns/op) across sizes 10k–100k.
 
 ### V2 vs JDK
-| Method                          | V2 (ns)   | JDK (ns)    |            Winner            |  Margin   |
-|:--------------------------------|:----------|:------------|:----------------------------:|:---------:|
-| `add(E)`                        | 166       | 393         |            **V2**            |   2.37x   |
-| `addAll(Collection)`            | 172,891   | 169,494     | **Statistically Equivalent** |   1.02x   |
-| `addFirst(E)`                   | 116       | 114         | **Statistically Equivalent** |   1.02x   |
-| `addLast(E)`                    | 104       | 120         |            **V2**            |   1.15x   |
-| `clear()`                       | 345       | 30,497      |            **V2**            |  88.40x   |
-| `contains(Object)`              | 47,545    | 20,522      |           **JDK**            |   2.32x   |
-| `containsAll(Collection)`       | 206,840   | 1,187,910   |            **V2**            |   5.74x   |
-| `descendingIterator()`          | 70,808    | 91,328      |            **V2**            |   1.29x   |
-| `element()`                     | 31        | 38          |            **V2**            |   1.23x   |
-| `equals(Object)`                | 140,662   | 338         |           **JDK**            |  416.16x  |
-| `getFirst()`                    | 31        | 60          |            **V2**            |   1.94x   |
-| `getLast()`                     | 35        | 63          |            **V2**            |   1.80x   |
-| `isEmpty()`                     | 47        | 51          | **Statistically Equivalent** |   1.09x   |
-| `iterator()`                    | 66,091    | 91,618      |            **V2**            |   1.39x   |
-| `offer(E)`                      | 83        | 254         |            **V2**            |   3.06x   |
-| `offerFirst(E)`                 | 141       | 161         |            **V2**            |   1.14x   |
-| `offerLast(E)`                  | 266       | 286         | **Statistically Equivalent** |   1.08x   |
-| `peek()`                        | 34        | 34          | **Statistically Equivalent** |   1.00x   |
-| `peekFirst()`                   | 30        | 33          | **Statistically Equivalent** |   1.10x   |
-| `peekLast()`                    | 30        | 32          | **Statistically Equivalent** |   1.07x   |
-| `poll()`                        | 108       | 165         |            **V2**            |   1.53x   |
-| `pollFirst()`                   | 50        | 93          |            **V2**            |   1.86x   |
-| `pollLast()`                    | 79        | 69          |           **JDK**            |   1.14x   |
-| `pop()`                         | 58        | 173         |            **V2**            |   2.98x   |
-| `push(E)`                       | 125       | 124         | **Statistically Equivalent** |   1.01x   |
-| `remove()`                      | 79        | 132         |            **V2**            |   1.67x   |
-| `remove(Object)`                | 71,870    | 28,120      |           **JDK**            |   2.56x   |
-| `removeAll(Collection)`         | 692,354   | 853,949,674 |            **V2**            | 1,233.41x |
-| `removeFirst()`                 | 54        | 79          |            **V2**            |   1.46x   |
-| `removeFirstOccurrence(Object)` | 74,441    | 20,554      |           **JDK**            |   3.62x   |
-| `removeLast()`                  | 50        | 113         |            **V2**            |   2.26x   |
-| `removeLastOccurrence(Object)`  | 61,366    | 30,898      |           **JDK**            |   1.99x   |
-| `retainAll(Collection)`         | 507,633   | 854,068,357 |            **V2**            | 1,682.47x |
-| `size()`                        | 37        | 51          |            **V2**            |   1.38x   |
-| `toArray()`                     | 11,940    | 10,499      |           **JDK**            |   1.14x   |
-| `toArray(T[])`                  | 54,345    | 34,608      |           **JDK**            |   1.57x   |
-| `toString()`                    | 1,888,071 | 1,101,234   |           **JDK**            |   1.71x   |
+| Method                          | V2 (ns)   | JDK (ns)  |            Winner            | Margin |
+|:--------------------------------|:----------|:----------|:----------------------------:|:------:|
+| `add(E)`                        | 157,394   | 362,922   |            **V2**            | 2.31x  |
+| `addAll(Collection)`            | 109,573   | 167,741   |            **V2**            | 1.53x  |
+| `addFirst(E)`                   | 155,049   | 254,255   |            **V2**            | 1.64x  |
+| `addLast(E)`                    | 201,035   | 363,644   |            **V2**            | 1.81x  |
+| `clear()`                       | 52        | 56        | **Statistically Equivalent** | 1.07x  |
+| `contains(Object)`              | 29,907    | 21,105    |           **JDK**            | 1.42x  |
+| `containsAll(Collection)`       | 773,662   | 991,846   |            **V2**            | 1.28x  |
+| `descendingIterator()`          | 35,177    | 49,063    |            **V2**            | 1.39x  |
+| `element()`                     | 50        | 65        |            **V2**            | 1.30x  |
+| `equals(Object)`                | 385,405   | 359,352   | **Statistically Equivalent** | 1.07x  |
+| `getFirst()`                    | 69        | 65        | **Statistically Equivalent** | 1.06x  |
+| `getLast()`                     | 57        | 66        |            **V2**            | 1.17x  |
+| `isEmpty()`                     | 55        | 70        |            **V2**            | 1.28x  |
+| `iterator()`                    | 38,471    | 42,217    | **Statistically Equivalent** | 1.10x  |
+| `offer(E)`                      | 181,393   | 271,155   |            **V2**            | 1.49x  |
+| `offerFirst(E)`                 | 172,077   | 166,344   | **Statistically Equivalent** | 1.03x  |
+| `offerLast(E)`                  | 195,571   | 174,098   | **Statistically Equivalent** | 1.12x  |
+| `peek()`                        | 53        | 59        | **Statistically Equivalent** | 1.11x  |
+| `peekFirst()`                   | 75        | 55        |           **JDK**            | 1.36x  |
+| `peekLast()`                    | 60        | 58        | **Statistically Equivalent** | 1.02x  |
+| `poll()`                        | 131,335   | 128,832   | **Statistically Equivalent** | 1.02x  |
+| `pollFirst()`                   | 132,204   | 128,485   | **Statistically Equivalent** | 1.03x  |
+| `pollLast()`                    | 129,354   | 132,518   | **Statistically Equivalent** | 1.02x  |
+| `pop()`                         | 130,565   | 132,193   | **Statistically Equivalent** | 1.01x  |
+| `push(E)`                       | 163,807   | 179,258   | **Statistically Equivalent** | 1.09x  |
+| `remove()`                      | 134,254   | 132,917   | **Statistically Equivalent** | 1.01x  |
+| `remove(Object)`                | 214,283   | 151,925   |           **JDK**            | 1.41x  |
+| `removeAll(Collection)`         | 890,940   | 869,923   | **Statistically Equivalent** | 1.02x  |
+| `removeFirst()`                 | 134,206   | 126,329   | **Statistically Equivalent** | 1.06x  |
+| `removeFirstOccurrence(Object)` | 231,241   | 167,785   |           **JDK**            | 1.38x  |
+| `removeLast()`                  | 141,778   | 131,815   | **Statistically Equivalent** | 1.08x  |
+| `removeLastOccurrence(Object)`  | 228,703   | 150,749   |           **JDK**            | 1.52x  |
+| `retainAll(Collection)`         | 842,800   | 829,622   | **Statistically Equivalent** | 1.02x  |
+| `size()`                        | 59        | 71        |            **V2**            | 1.21x  |
+| `toArray()`                     | 8,919     | 7,619     |           **JDK**            | 1.17x  |
+| `toArray(T[])`                  | 37,626    | 41,216    | **Statistically Equivalent** | 1.10x  |
+| `toString()`                    | 1,005,861 | 1,113,066 | **Statistically Equivalent** | 1.11x  |
 
 ### V1 vs V2
 
-| Method                          | V1 (ns)   | V2 (ns)     |            Winner            |  Margin   |
-|:--------------------------------|:----------|:------------|:----------------------------:|:---------:|
-| `add(E)`                        | 166       | 166         | **Statistically Equivalent** |   1.00x   |
-| `addAll(Collection)`            | 184,845   | 172,891     | **Statistically Equivalent** |   1.07x   |
-| `addFirst(E)`                   | 41        | 116         |            **V1**            |   2.83x   |
-| `addLast(E)`                    | 75        | 104         |            **V1**            |   1.39x   |
-| `clear()`                       | 287       | 345         |            **V1**            |   1.20x   |
-| `contains(Object)`              | 31,952    | 47,545      |            **V1**            |   1.49x   |
-| `containsAll(Collection)`       | 161,906   | 206,840     |            **V1**            |   1.28x   |
-| `descendingIterator()`          | 70,150    | 70,808      | **Statistically Equivalent** |   1.01x   |
-| `element()`                     | 35        | 31          |            **V2**            |   1.13x   |
-| `equals(Object)`                | 120,365   | 140,662     |            **V1**            |   1.17x   |
-| `getFirst()`                    | 27        | 31          |            **V1**            |   1.15x   |
-| `getLast()`                     | 30        | 35          |            **V1**            |   1.17x   |
-| `isEmpty()`                     | 42        | 47          |            **V1**            |   1.12x   |
-| `iterator()`                    | 66,100    | 66,091      | **Statistically Equivalent** |   1.00x   |
-| `offer(E)`                      | 112       | 83          |            **V2**            |   1.35x   |
-| `offerFirst(E)`                 | 75        | 141         |            **V1**            |   1.88x   |
-| `offerLast(E)`                  | 221       | 266         |            **V1**            |   1.20x   |
-| `peek()`                        | 34        | 34          | **Statistically Equivalent** |   1.00x   |
-| `peekFirst()`                   | 28        | 30          | **Statistically Equivalent** |   1.07x   |
-| `peekLast()`                    | 33        | 30          | **Statistically Equivalent** |   1.10x   |
-| `poll()`                        | 270       | 108         |            **V2**            |   2.50x   |
-| `pollFirst()`                   | 91        | 50          |            **V2**            |   1.82x   |
-| `pollLast()`                    | 79        | 79          | **Statistically Equivalent** |   1.00x   |
-| `pop()`                         | 75        | 58          |            **V2**            |   1.29x   |
-| `push(E)`                       | 100       | 125         |            **V1**            |   1.25x   |
-| `remove()`                      | 74        | 79          | **Statistically Equivalent** |   1.07x   |
-| `remove(Object)`                | 22,478    | 71,870      |            **V1**            |   3.20x   |
-| `removeAll(Collection)`         | 438,512   | 692,354     |            **V1**            |   1.58x   |
-| `removeFirst()`                 | 174       | 54          |            **V2**            |   3.22x   |
-| `removeFirstOccurrence(Object)` | 25,504    | 74,441      |            **V1**            |   2.92x   |
-| `removeLast()`                  | 70        | 50          |            **V2**            |   1.40x   |
-| `removeLastOccurrence(Object)`  | 20,150    | 61,366      |            **V1**            |   3.05x   |
-| `retainAll(Collection)`         | 459,841   | 507,633     | **Statistically Equivalent** |   1.10x   |
-| `size()`                        | 35        | 37          | **Statistically Equivalent** |   1.06x   |
-| `toArray()`                     | 12,268    | 11,940      | **Statistically Equivalent** |   1.03x   |
-| `toArray(T[])`                  | 53,814    | 54,345      | **Statistically Equivalent** |   1.01x   |
-| `toString()`                    | 1,497,708 | 1,888,071   |            **V1**            |   1.26x   |
+| Method                          | V1 (ns) | V2 (ns)   |            Winner            | Margin |
+|:--------------------------------|:--------|:----------|:----------------------------:|:------:|
+| `add(E)`                        | 224,146 | 157,394   |            **V2**            | 1.42x  |
+| `addAll(Collection)`            | 94,839  | 109,573   |            **V1**            | 1.16x  |
+| `addFirst(E)`                   | 151,967 | 155,049   | **Statistically Equivalent** | 1.02x  |
+| `addLast(E)`                    | 223,640 | 201,035   | **Statistically Equivalent** | 1.11x  |
+| `clear()`                       | 32      | 52        |            **V1**            | 1.66x  |
+| `contains(Object)`              | 14,592  | 29,907    |            **V1**            | 2.05x  |
+| `containsAll(Collection)`       | 702,213 | 773,662   | **Statistically Equivalent** | 1.10x  |
+| `descendingIterator()`          | 33,691  | 35,177    | **Statistically Equivalent** | 1.04x  |
+| `element()`                     | 32      | 50        |            **V1**            | 1.56x  |
+| `equals(Object)`                | 262,560 | 385,405   |            **V1**            | 1.47x  |
+| `getFirst()`                    | 32      | 69        |            **V1**            | 2.13x  |
+| `getLast()`                     | 32      | 57        |            **V1**            | 1.75x  |
+| `isEmpty()`                     | 36      | 55        |            **V1**            | 1.54x  |
+| `iterator()`                    | 33,103  | 38,471    |            **V1**            | 1.16x  |
+| `offer(E)`                      | 221,613 | 181,393   |            **V2**            | 1.22x  |
+| `offerFirst(E)`                 | 140,523 | 172,077   |            **V1**            | 1.22x  |
+| `offerLast(E)`                  | 148,519 | 195,571   |            **V1**            | 1.32x  |
+| `peek()`                        | 40      | 53        |            **V1**            | 1.32x  |
+| `peekFirst()`                   | 41      | 75        |            **V1**            | 1.82x  |
+| `peekLast()`                    | 39      | 60        |            **V1**            | 1.52x  |
+| `poll()`                        | 109,990 | 131,335   |            **V1**            | 1.19x  |
+| `pollFirst()`                   | 110,071 | 132,204   |            **V1**            | 1.20x  |
+| `pollLast()`                    | 110,568 | 129,354   |            **V1**            | 1.17x  |
+| `pop()`                         | 109,347 | 130,565   |            **V1**            | 1.19x  |
+| `push(E)`                       | 150,868 | 163,807   | **Statistically Equivalent** | 1.09x  |
+| `remove()`                      | 109,896 | 134,254   |            **V1**            | 1.22x  |
+| `remove(Object)`                | 129,862 | 214,283   |            **V1**            | 1.65x  |
+| `removeAll(Collection)`         | 763,193 | 890,940   |            **V1**            | 1.17x  |
+| `removeFirst()`                 | 109,818 | 134,206   |            **V1**            | 1.22x  |
+| `removeFirstOccurrence(Object)` | 127,908 | 231,241   |            **V1**            | 1.81x  |
+| `removeLast()`                  | 111,249 | 141,778   |            **V1**            | 1.27x  |
+| `removeLastOccurrence(Object)`  | 126,932 | 228,703   |            **V1**            | 1.80x  |
+| `retainAll(Collection)`         | 709,455 | 842,800   |            **V1**            | 1.19x  |
+| `size()`                        | 40      | 59        |            **V1**            | 1.47x  |
+| `toArray()`                     | 6,653   | 8,919     |            **V1**            | 1.34x  |
+| `toArray(T[])`                  | 32,613  | 37,626    | **Statistically Equivalent** | 1.15x  |
+| `toString()`                    | 880,184 | 1,005,861 | **Statistically Equivalent** | 1.14x  |
+
 # Performance Charts
 
 #### Note: The following performance charts are designed to be viewed in dark mode.
 
 # Heat Maps
-
-### V2 vs JDK
 ![Heatmap](PerformanceCharts/V2_JDK/heatmap.png)
-
-### V1 vs V2
 ![Heatmap](PerformanceCharts/V1_V2/heatmap.png)
-# V1 vs V2 vs JDK
+![Heatmap](PerformanceCharts/V1_JDK/heatmap.png)
 
+# V1 vs V2 vs JDK
 ![add](PerformanceCharts/V1_V2_JDK/plot_add_E_.png)
 ![addAll](PerformanceCharts/V1_V2_JDK/plot_addAll_Collection_.png)
 ![addFirst](PerformanceCharts/V1_V2_JDK/plot_addFirst_E_.png)
@@ -242,7 +238,6 @@ Note: all data is an average of 100 runs. Margins within $\pm 5\%$ ($\le 1.05x$)
 ![toString](PerformanceCharts/V1_V2_JDK/plot_toString__.png)
 
 ## V2 vs JDK
-
 ![add](PerformanceCharts/V2_JDK/plot_add_E_.png)
 ![addAll](PerformanceCharts/V2_JDK/plot_addAll_Collection_.png)
 ![addFirst](PerformanceCharts/V2_JDK/plot_addFirst_E_.png)
@@ -282,7 +277,6 @@ Note: all data is an average of 100 runs. Margins within $\pm 5\%$ ($\le 1.05x$)
 ![toString](PerformanceCharts/V2_JDK/plot_toString__.png)
 
 ## V1 vs V2
-
 ![add](PerformanceCharts/V1_V2/plot_add_E_.png)
 ![addAll](PerformanceCharts/V1_V2/plot_addAll_Collection_.png)
 ![addFirst](PerformanceCharts/V1_V2/plot_addFirst_E_.png)
@@ -320,3 +314,45 @@ Note: all data is an average of 100 runs. Margins within $\pm 5\%$ ($\le 1.05x$)
 ![toArray](PerformanceCharts/V1_V2/plot_toArray__.png)
 ![toArray_T](PerformanceCharts/V1_V2/plot_toArray_T[]_.png)
 ![toString](PerformanceCharts/V1_V2/plot_toString__.png)
+
+## V1 vs JDK
+
+![Constructor](PerformanceCharts/V1_JDK/plot_constructor__.png)
+![ConstructCollection](PerformanceCharts/V1_JDK/plot_constructor_Collection_.png)
+![add](PerformanceCharts/V1_JDK/plot_add_E_.png)
+![addAll](PerformanceCharts/V1_JDK/plot_addAll_Collection_.png)
+![addFirst](PerformanceCharts/V1_JDK/plot_addFirst_E_.png)
+![addLast](PerformanceCharts/V1_JDK/plot_addLast_E_.png)
+![clear](PerformanceCharts/V1_JDK/plot_clear__.png)
+![contains](PerformanceCharts/V1_JDK/plot_contains_Object_.png)
+![containsAll](PerformanceCharts/V1_JDK/plot_containsAll_Collection_.png)
+![descendingOrderIterator](PerformanceCharts/V1_JDK/plot_descendingIterator__.png)
+![element](PerformanceCharts/V1_JDK/plot_element__.png)
+![equals](PerformanceCharts/V1_JDK/plot_equals_Object_.png)
+![getFirst](PerformanceCharts/V1_JDK/plot_getFirst__.png)
+![getLast](PerformanceCharts/V1_JDK/plot_getLast__.png)
+![isEmpty](PerformanceCharts/V1_JDK/plot_isEmpty__.png)
+![iterator](PerformanceCharts/V1_JDK/plot_iterator__.png)
+![offer](PerformanceCharts/V1_JDK/plot_offer_E_.png)
+![offerFirst](PerformanceCharts/V1_JDK/plot_offerFirst_E_.png)
+![offerLast](PerformanceCharts/V1_JDK/plot_offerLast_E_.png)
+![peek](PerformanceCharts/V1_JDK/plot_peek__.png)
+![peekFirst](PerformanceCharts/V1_JDK/plot_peekFirst__.png)
+![peekLast](PerformanceCharts/V1_JDK/plot_peekLast__.png)
+![poll](PerformanceCharts/V1_JDK/plot_poll__.png)
+![pollFirst](PerformanceCharts/V1_JDK/plot_pollFirst__.png)
+![pollLast](PerformanceCharts/V1_JDK/plot_pollLast__.png)
+![pop](PerformanceCharts/V1_JDK/plot_pop__.png)
+![push](PerformanceCharts/V1_JDK/plot_push_E_.png)
+![remove](PerformanceCharts/V1_JDK/plot_remove__.png)
+![removeObject](PerformanceCharts/V1_JDK/plot_remove_Object_.png)
+![removeAll](PerformanceCharts/V1_JDK/plot_removeAll_Collection_.png)
+![removeFirst](PerformanceCharts/V1_JDK/plot_removeFirst__.png)
+![removeFirstOccurrence](PerformanceCharts/V1_JDK/plot_removeFirstOccurrence_Object_.png)
+![removeLast](PerformanceCharts/V1_JDK/plot_removeLast__.png)
+![removeLastOccurrence](PerformanceCharts/V1_JDK/plot_removeLastOccurrence_Object_.png)
+![retainAll](PerformanceCharts/V1_JDK/plot_retainAll_Collection_.png)
+![size](PerformanceCharts/V1_JDK/plot_size__.png)
+![toArray](PerformanceCharts/V1_JDK/plot_toArray__.png)
+![toArray_T](PerformanceCharts/V1_JDK/plot_toArray_T[]_.png)
+![toString](PerformanceCharts/V1_JDK/plot_toString__.png)
