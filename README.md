@@ -56,8 +56,6 @@ To test the project run command `./gradlew test`
 
 # Space Complexity
 
-# Space Complexity Comparison
-
 | Method                            |          V1          |           V2           |       JDK       | Winner |
 |:----------------------------------|:--------------------:|:----------------------:|:---------------:|:------:|
 | **add(E)**                        |        $O(1)$        |         $O(1)$         |     $O(1)$      |  Tie   |
