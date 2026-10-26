@@ -10,6 +10,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import static java.lang.reflect.Array.newInstance;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Resizable-array implementation of the {@link Deque} interface.
@@ -34,9 +35,12 @@ import static java.lang.reflect.Array.newInstance;
 public class CustomArrayDeque<E> implements Deque<E> {
 
     private E[] deque;
+
     private int head;
     private int tail;
+
     private final int minimumCapacity = 16;
+
     protected int modCount = 0;
 
     /**
@@ -58,7 +62,7 @@ public class CustomArrayDeque<E> implements Deque<E> {
         if(numElements < 0)
             throw new IllegalArgumentException();
         int capacity = getNewSize(numElements);
-        deque =  (E[]) new Object[capacity];
+        deque = (E[]) new Object[capacity];
         head = tail = 0;
     }
 
@@ -70,9 +74,14 @@ public class CustomArrayDeque<E> implements Deque<E> {
      * @throws NullPointerException if the specified collection or any of its elements is null
      */
     public CustomArrayDeque(final Collection<? extends E> c) {
-        Objects.requireNonNull(c);
+        requireNonNull(c);
+        if(c.isEmpty()) {
+            head = tail = 0;
+            deque = (E[]) new Object[minimumCapacity];
+            return;
+        }
         int capacity = getNewSize(c.size());
-        deque =  (E[]) new Object[capacity];
+        deque = (E[]) new Object[capacity];
         head = 0;
         addAll(c);
     }
@@ -85,7 +94,7 @@ public class CustomArrayDeque<E> implements Deque<E> {
      * @throws NullPointerException if the specified element is null
      */
     public boolean add(final E item) {
-        Objects.requireNonNull(item);
+        requireNonNull(item);
         if(requiresResize())
             expand(1);
         deque[tail] = item;
@@ -103,13 +112,13 @@ public class CustomArrayDeque<E> implements Deque<E> {
      * @throws NullPointerException if the specified collection or any of its elements is null
      */
     public boolean addAll(final Collection<? extends E> c) {
-        Objects.requireNonNull(c);
+        requireNonNull(c);
         if(c.isEmpty())
             return false;
         if(requiresResizeForNewCollection(c))
             expand(c.size());
         for(E e : c) {
-            Objects.requireNonNull(e);
+            requireNonNull(e);
             deque[tail] = e;
             shiftTailRight();
         }
@@ -124,7 +133,7 @@ public class CustomArrayDeque<E> implements Deque<E> {
      * @throws NullPointerException if the specified element is null
      */
     public void addFirst(final E item) {
-        Objects.requireNonNull(item);
+        requireNonNull(item);
         if(requiresResize())
             expand(1);
         shiftHeadLeft();
@@ -175,7 +184,7 @@ public class CustomArrayDeque<E> implements Deque<E> {
      */
     @SuppressWarnings("DataFlowIssue")
     public boolean containsAll(final Collection<?> c) {
-        Objects.requireNonNull(c);
+        requireNonNull(c);
         if(c.isEmpty())
             return true;
         Collection<?> checkCollection = (c instanceof Set<?> || c.size() < 4) ? c : new HashSet<>(c);
@@ -365,7 +374,7 @@ public class CustomArrayDeque<E> implements Deque<E> {
      * @throws NullPointerException if the specified element is null
      */
     public boolean offer(final E item) {
-        Objects.requireNonNull(item);
+        requireNonNull(item);
         return add(item);
     }
 
@@ -377,7 +386,7 @@ public class CustomArrayDeque<E> implements Deque<E> {
      * @throws NullPointerException if the specified element is null
      */
     public boolean offerFirst(final E item) {
-        Objects.requireNonNull(item);
+        requireNonNull(item);
         addFirst(item);
         return true;
     }
@@ -390,7 +399,7 @@ public class CustomArrayDeque<E> implements Deque<E> {
      * @throws NullPointerException if the specified element is null
      */
     public boolean offerLast(final E item) {
-        Objects.requireNonNull(item);
+        requireNonNull(item);
         if(requiresResize())
             expand(1);
         return add(item);
@@ -519,7 +528,7 @@ public class CustomArrayDeque<E> implements Deque<E> {
      * @throws NullPointerException if the specified collection is null
      */
     public boolean removeAll(final Collection<?> c) {
-        Objects.requireNonNull(c);
+        requireNonNull(c);
         if(c.isEmpty())
             return false;
         boolean modified = false;
@@ -609,7 +618,7 @@ public class CustomArrayDeque<E> implements Deque<E> {
      * @throws NullPointerException if the specified collection is null
      */
     public boolean retainAll(final Collection<?> c) {
-        Objects.requireNonNull(c);
+        requireNonNull(c);
         boolean modified = false;
         Collection<?> checkCollection = (c instanceof Set<?> || c.size() < 4) ? c : new HashSet<>(c);
         Set<?> set = (checkCollection instanceof Set<?>) ? (Set<?>) checkCollection : new HashSet<>(checkCollection);
@@ -668,7 +677,7 @@ public class CustomArrayDeque<E> implements Deque<E> {
      * @throws NullPointerException if the specified array is null
      */
     public <T> T[] toArray(T[] a) {
-        Objects.requireNonNull(a);
+        requireNonNull(a);
         int size = size();
         if(a.length < size) a = (T[])
                 newInstance(a.getClass().getComponentType(), size);
@@ -756,7 +765,6 @@ public class CustomArrayDeque<E> implements Deque<E> {
         int size = size();
         int mask = deque.length - 1;
         deque[(head + index) & mask] = null;
-
         if(index < size / 2) {
             for(int x = index; x > 0; x--) {
                 int current = (head + x) & mask;
@@ -807,7 +815,6 @@ public class CustomArrayDeque<E> implements Deque<E> {
 
     private void shiftHeadRight() {
         head = (head + 1) & (deque.length - 1);
-
     }
 
     private void shiftTailLeft() {
